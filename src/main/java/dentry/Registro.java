@@ -1,6 +1,8 @@
 package dentry;
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Registro {
 
@@ -9,8 +11,7 @@ public class Registro {
 	private String detalle;
 
 	private int numeroLinea;
-	private Calendar fechaPractica;
-	private String fechaPractica2Str = "mmddyyyy";
+	private String fechaPractica;
 	private String numeroAfiliado;
 	private String codigoPractica;
 	private int cantidad;
@@ -35,14 +36,6 @@ public class Registro {
 
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
-	}
-
-	public Calendar getFechaPractica() {
-		return fechaPractica;
-	}
-
-	public void setFechaPractica(Calendar fechaPractica) {
-		this.fechaPractica = fechaPractica;
 	}
 
 	public String getNumeroAfiliado() {
@@ -83,17 +76,15 @@ public class Registro {
 	}
 
 	// Metodos de instancia
-	public String crearCabecera() {
+	public String crearCabecera() throws CustomException {
 		String linea = "";
 
-		// TODO Realizar controles
+		String fechaPracticaConv = this.invertirFecha(fechaPractica);
 
-		// TODO Formatear fecha en string fechaPractica2Str
-
-		// <num_linea>,0,<fechaPractica_mmddaaa>,<fechaPractica_mmddaaa>,<nulo>,<nulo>,121,<num_afiliado{8}>,<num_afiliado{2}>,
+		// <num_linea>,0,<fechaPractica_mmddaaaa>,<fechaPractica_mmddaaaa>,<nulo>,<nulo>,121,<num_afiliado{8}>,<num_afiliado{2}>,
 		// MC999999,0,0,<nulo>,<nulo>,<nulo>,<nulo>,<nulo>,<nulo>,0,<monto>
         linea = numeroLinea + COMA + "0" + COMA
-                + fechaPractica2Str + COMA + fechaPractica2Str + COMA
+                + fechaPracticaConv + COMA + fechaPracticaConv + COMA
                 + NULO + COMA + NULO + COMA
                 + "121" + COMA + numeroAfiliado.substring(0, 8) + COMA
                 + numeroAfiliado.substring(8, 10) + COMA + "MC999999" + COMA
@@ -106,20 +97,39 @@ public class Registro {
 		return linea;
 	}
 
-	public String crearDetalle() {
+	
+	public String crearDetalle() throws CustomException {
 		String linea = "";
 
-		// TODO Realizar controles
-
-		// TODO Formatear fecha en string fechaPractica2Str
-
-		// <num_linea>,1,<fechaPractica_mmddaaa>,<fechaPractica_mmddaaa>,<nulo>,<CodPractica>,<nulo>,<cantidad>,<monto>
+		String fechaPracticaConv = this.invertirFecha(fechaPractica);
+		
+		// <num_linea>,1,<fechaPractica_mmddaaaa>,<fechaPractica_mmddaaaa>,<nulo>,<CodPractica>,<nulo>,<cantidad>,<monto>
         linea = numeroLinea + COMA + "1" + COMA
-                + fechaPractica2Str + COMA + fechaPractica2Str + COMA
+                + fechaPracticaConv + COMA + fechaPracticaConv + COMA
                 + NULO + COMA + codigoPractica + COMA
                 + NULO+ COMA + cantidad + COMA +
                 + monto + NL;
 
 		return linea;
+	}
+	
+	public String invertirFecha(String fechaStr) throws CustomException{
+		
+		SimpleDateFormat inputFormat = new SimpleDateFormat("ddMMyyyy");
+	    SimpleDateFormat outputFormat = new SimpleDateFormat("MMddyyyy");
+	    Date fecha = null;
+		try {
+			if(fechaStr.length() == 8){
+				fecha = inputFormat.parse(fechaStr);				
+			}
+			else{
+				throw new CustomException("Fecha inválida");
+			}
+			
+		} catch (ParseException e) {
+			throw new CustomException("Fecha inválida.");
+		}
+		
+	    return outputFormat.format(fecha);
 	}
 }
