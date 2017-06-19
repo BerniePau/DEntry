@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public class Utils {
@@ -40,5 +41,15 @@ public class Utils {
 				throw new CustomException("Se produjo un error al cerrar el archivo.");
 			}
 		}
+	}
+	
+	public void generarArchivo(File fileTmp, File file) throws CustomException{
+		
+		try {
+			Files.copy(fileTmp.toPath(), file.toPath());
+		} catch (IOException e) {
+			throw new CustomException("Error al guardar archivo.");
+		}	
+		
 	}
 }

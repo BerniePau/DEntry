@@ -15,9 +15,11 @@ public class Registro {
 	private String numeroAfiliado;
 	private String codigoPractica;
 	private int cantidad;
-	private float monto;
+	private int numeroRecepcion;
+	private Float monto;
 
 	private String COMA = ",";
+	private String COMILLA = "\"";
 	private String NULO = "";
 	private String NL = "\n";
 
@@ -61,6 +63,14 @@ public class Registro {
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
+	
+	public int getNumeroRecepcion() {
+		return numeroRecepcion;
+	}
+
+	public void setNumeroRecepcion(int numeroRecepcion) {
+		this.numeroRecepcion = numeroRecepcion;
+	}
 
 	public float getMonto() {
 		return monto;
@@ -76,11 +86,18 @@ public class Registro {
 	}
 
 	// Metodos de instancia
+	
 	public String crearCabecera() throws CustomException {
 		String linea = "";
 
+		// Controles //
+		// Invierte fecha
 		String fechaPracticaConv = this.invertirFecha(fechaPractica);
+		
+		// Configura punto decimal (debe ser coma)
+		String montoConv = monto.toString().replace(".", ",");
 
+		// Genera linea de cabecera
 		// <num_linea>,0,<fechaPractica_mmddaaaa>,<fechaPractica_mmddaaaa>,<nulo>,<nulo>,121,<num_afiliado{8}>,<num_afiliado{2}>,
 		// MC999999,0,0,<nulo>,<nulo>,<nulo>,<nulo>,<nulo>,<nulo>,0,<monto>
         linea = numeroLinea + COMA + "0" + COMA
@@ -92,7 +109,8 @@ public class Registro {
                 + NULO + COMA + NULO + COMA
                 + NULO + COMA + NULO + COMA
                 + NULO + COMA + NULO + COMA
-                + "0" + COMA + monto + NL ;
+                + "0" + COMA + numeroRecepcion + COMA 
+                + COMILLA + montoConv + COMILLA + NL ;
 
 		return linea;
 	}
@@ -101,14 +119,20 @@ public class Registro {
 	public String crearDetalle() throws CustomException {
 		String linea = "";
 
+		// Controles //
+		// Invierte fecha
 		String fechaPracticaConv = this.invertirFecha(fechaPractica);
 		
+		// Configura punto decimal (debe ser coma)
+		String montoConv = monto.toString().replace(".", ",");
+		
+		// Genera linea de detalle
 		// <num_linea>,1,<fechaPractica_mmddaaaa>,<fechaPractica_mmddaaaa>,<nulo>,<CodPractica>,<nulo>,<cantidad>,<monto>
         linea = numeroLinea + COMA + "1" + COMA
                 + fechaPracticaConv + COMA + fechaPracticaConv + COMA
                 + NULO + COMA + codigoPractica + COMA
-                + NULO+ COMA + cantidad + COMA +
-                + monto + NL;
+                + NULO+ COMA + cantidad + COMA 
+                + COMILLA + montoConv + COMILLA + NL ;
 
 		return linea;
 	}
@@ -132,4 +156,5 @@ public class Registro {
 		
 	    return outputFormat.format(fecha);
 	}
+	
 }
