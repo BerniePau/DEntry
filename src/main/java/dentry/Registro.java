@@ -24,8 +24,21 @@ public class Registro {
 	private String NL = "\n";
 
 	// Getters y Setters
+	
 	public String getCabecera() {
 		return cabecera;
+	}
+
+	public String getFechaPractica() {
+		return fechaPractica;
+	}
+
+	public void setFechaPractica(String fechaPractica) {
+		this.fechaPractica = fechaPractica;
+	}
+
+	public void setMonto(Float monto) {
+		this.monto = monto;
 	}
 
 	public void setCabecera(String cabecera) {
@@ -155,6 +168,11 @@ public class Registro {
 		}
 		
 	    return outputFormat.format(fecha);
+	}
+	
+	public void armar() throws CustomException{
+		setCabecera(crearCabecera());
+		setDetalle(crearDetalle());
 	}
 	
 }
