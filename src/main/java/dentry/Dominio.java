@@ -8,17 +8,9 @@ public class Dominio {
 
 	private static int numeroLinea;
 	private static int contadorReg;
-	private static int cantRegAutoguardado = 2; // TODO Parametrizar por properties
+	private static int cantRegAutoguardado = 1; // TODO Parametrizar por properties
 	private static String filePath;
-	private static List<Registro> registros;
-	
-	// Constructor
-	
-	private Dominio(){
-		if(registros == null){
-			registros = new ArrayList<Registro>();
-		}
-	}
+	private static List<Registro> registros = new ArrayList<Registro>();
 	
 	// Getters y Setters
 	

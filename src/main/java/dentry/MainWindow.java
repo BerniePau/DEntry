@@ -170,6 +170,8 @@ public class MainWindow extends JFrame {
 					.addContainerGap(52, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
+		
+		rellenarPrueba();
 	}
 	
 	public void actionAceptar(){
@@ -185,19 +187,21 @@ public class MainWindow extends JFrame {
 		registro.setNumeroRecepcion(Integer.parseInt(txtNumRecepcion.getText()));
 		registro.setMonto(Float.parseFloat(txtMonto.getText()));
 		
-		Dominio.addRegistro(registro);
 		try {
+			registro.armar();
+			Dominio.addRegistro(registro);
 			Dominio.autoGuardado();
+			
 		} catch (CustomException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		
 		limpiarPantalla();
-		
+		rellenarPrueba();
 	}
 
 	private void limpiarPantalla() {
+		
 		txtFechaPractica.setText("");
 		txtNumAfiliado.setText("");
 		txtCodPractica.setText("");
@@ -205,5 +209,17 @@ public class MainWindow extends JFrame {
 		txtNumRecepcion.setText("");
 		txtMonto.setText("");
 	
+	}
+	
+	// TODDO ELIMINAR
+	public void rellenarPrueba(){
+		txtFechaPractica.setText("25062017");
+		txtNumAfiliado.setText("1234567899");
+		txtCodPractica.setText("101");
+		txtCantidad.setText("22");
+		txtNumRecepcion.setText("333");
+		txtMonto.setText("1000");
+		
+		txtPath.setText("C:\\Users\\Usuario\\AppData\\Local\\Temp\\DEntry_TMP.txt");
 	}
 }
